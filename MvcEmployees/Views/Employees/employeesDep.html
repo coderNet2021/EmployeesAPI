@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+   
+    <title></title>
+</head>
+<body>
+    <div>
+        <input id="btn" type="button" value="Get All Employees" />
+        <input id="btnL" type="button" value="Get All Employees ADO" />
+        <input id="btnClear" type="button" value="Clear" />
+        <ul id="ulEmployees" />
+    </div>
+
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var ulEmployees = $('#ulEmployees');
+            $('#btn').click(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: "../../api/employees/",
+                    dataType: 'json',
+                    success: function (data) {
+                        ulEmployees.empty();
+                        $.each(data, function (index, val) {
+                            var fullName = val.FirstName + ' ' + val.LastName;
+                            ulEmployees.append('<li>' + fullName + '</li>');
+                        });
+                    }
+                });
+            });
+            $('#btnL').click(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: "../../api/employees/GetEmpDep",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        console.log(typeof data);
+                        //var JsonObject = JSON.parse(data);
+                        //console.log(JsonObject);
+                        ulEmployees.empty();
+                        $.each(data, function (index, val) {
+                            var fullName = val.firstName + ' ' + val.lastName;
+                            var dep = val.departmentName
+                            ulEmployees.append('<li>' + fullName + ' in dep : ' + dep + '</li>');
+                        });
+                    }
+                });
+            });
+            $('#btnClear').click(function () {
+                ulEmployees.empty();
+            });
+        });
+    </script>
+</body>
+
+</html>

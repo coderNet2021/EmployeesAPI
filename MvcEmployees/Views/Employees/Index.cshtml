@@ -1,0 +1,82 @@
+﻿@model IEnumerable<MvcEmployees.EmployeeDepartmentViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="employees" class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee.Gender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee.Salary)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Department.DepartmentName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.Gender)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.Salary)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Department.DepartmentName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Employee.ID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Employee.ID }) |
+            @*@Html.ActionLink("Delete", "Delete", new { id = item.Employee.ID })*@
+            <button data-employee-id="@item.Employee.ID" class="btn btn-link js-delete">Delete</button>
+        </td>
+    </tr>
+}
+
+
+</table>
+@section scripts {
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#employees .js-delete").on("click", function () {
+                var button = $(this);
+                if (confirm("are you sure you want to delete this employee?")) {
+                    $.ajax({
+                        url: "/api/Employees/" + button.attr("data-employee-id"),
+                        method: "DELETE",
+                        success: function () {
+                            button.parents("tr").remove();
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
+
+}
+
